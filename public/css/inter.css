@@ -1,0 +1,16 @@
+.staticsticBar {
+    width: 40%;
+    /* background-color: rgb(171, 198, 247); */
+    float: right;
+
+}
+
+.staticsticBar table td {
+    max-width: 15%;
+    /* min-width:  */
+    background-color: rgb(171, 198, 247);
+    padding:10px;
+    text-align: right;
+    border:1px solid black;
+    border-radius:2px;
+}

@@ -6,6 +6,7 @@ const path = require('path');
 const router = require('./routes/index');
 const { auth } = require('express-openid-connect');
 const configFile = require('./config.json');
+
 // const { config, config, config } = require('process');
 dotenv.load();
 
@@ -30,7 +31,7 @@ const config = {
     login: false,
     // Pass a custom path to redirect users to a different
     // path after logout.
-    postLogoutRedirect: '/custom-logout',
+    postLogoutRedirect: '/',
   },
 };
 

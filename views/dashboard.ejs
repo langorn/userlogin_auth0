@@ -1,0 +1,72 @@
+<%- include('partials/header') -%>
+
+  <h1 class="text-4xl mb-4">Dashboard</h1>
+  
+  <p class="py-3">
+    This is the User Lists<code class="bg-gray-200"></code>.<br>
+
+    
+    <div id="app">
+        <div class = "staticsticBar">
+          <table>
+              <tr>
+                  <td>Total Register</td>
+                  <td> ((( statistics['users'] ))) </td>
+                  <td> Online(Today) </td>
+                  <td> ((( statistics['online_today'] ))) </td>
+                  <td> Online(7 Day) </td>
+                  <td> ((( statistics['online7d'] ))) </td>
+              </tr>
+          </table>
+
+        </div>
+
+        <div>
+            <table width="100%">
+              <tr></tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Date</th>
+              <tr></tr>
+              <tr v-for="d in users">
+                <td>((( d['name'] )))</td>
+                <td>((( d['email'] )))</td>
+                <td>((( d['last_session'] )))</td>
+              </tr>
+            </table>
+        </div>
+    </div>
+    <!-- <strong>Note:</strong> <code class="bg-gray-200">_raw</code> and <code class="bg-gray-200">_json</code> properties have been omitted. -->
+  </p>
+
+  <pre class="block bg-gray-300 p-4 text-sm overflow-scroll"></pre>
+  <script>
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        users: [],
+        statistics : {}
+      },
+      delimiters: ["(((",")))"],
+      methods: {
+        getUsers: async function () {
+            let response = await fetch('/users');
+            let results = await response.json();
+            this.users = results[0]['users'] ? results[0]['users'] : [];
+            console.log(this.users);
+        },
+        getStatistics: async function () {
+            let response = await fetch('/statistics');
+            let results = await response.json();
+            this.statistics  = results[0]
+            console.log(this.statistics );
+        }
+
+      }
+    })
+
+    vm.getUsers();
+    vm.getStatistics();
+  </script>
+<%- include('partials/footer') -%>
