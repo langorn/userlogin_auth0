@@ -10,7 +10,7 @@
         <div class = "staticsticBar">
           <table>
               <tr>
-                  <td>Total Register</td>
+                  <td>Total Users</td>
                   <td> ((( statistics['users'] ))) </td>
                   <td> Online(Today) </td>
                   <td> ((( statistics['online_today'] ))) </td>
@@ -22,16 +22,17 @@
         </div>
 
         <div>
-            <table width="100%">
+            <table class="userTable" width="100%">
               <tr></tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Date</th>
+                <th>Last Login AT</th>
               <tr></tr>
               <tr v-for="d in users">
                 <td>((( d['name'] )))</td>
                 <td>((( d['email'] )))</td>
                 <td>((( d['last_session'] )))</td>
+                <td><button class="editBtn" v-on:click="editUsername()">EDIT</button></td>
               </tr>
             </table>
         </div>
@@ -54,15 +55,33 @@
             let response = await fetch('/users');
             let results = await response.json();
             this.users = results[0]['users'] ? results[0]['users'] : [];
-            console.log(this.users);
+            this.users.forEach((item)=> {
+              item['last_session'] = item['last_session'].substr(0,19).replace('T'," ");   
+              return item;
+            })
         },
         getStatistics: async function () {
             let response = await fetch('/statistics');
             let results = await response.json();
-            this.statistics  = results[0]
-            console.log(this.statistics );
+            this.statistics  = results[0];
+        },
+        editUsername: async function () {
+            let newName = prompt('Please Enter The New Display Name');
+            let data = { 'name': newName };
+            // Default options are marked with *
+            const resp = await fetch('/updateUserName', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                  'Content-Type': 'application/json'
+                  // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            });
+            vm.getUsers();
         }
-
       }
     })
 

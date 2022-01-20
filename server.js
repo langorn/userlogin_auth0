@@ -7,6 +7,7 @@ const router = require('./routes/index');
 const { auth } = require('express-openid-connect');
 const configFile = require('./config.json');
 
+
 // const { config, config, config } = require('process');
 dotenv.load();
 

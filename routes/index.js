@@ -1,10 +1,34 @@
 var router = require('express').Router();
 const { text } = require('express');
 const { requiresAuth } = require('express-openid-connect');
-const { createUser , queryUser, queryUsers, updateUser, activateUser, userStatistic } = require('../db/sqldb');
+const { createUser , queryUser, queryUsers, updateUser, activateUser, userStatistic, updateUserName } = require('../db/sqldb');
 const nodemailer = require("nodemailer");
 const configFile = require('../config.json');
 var transporter;
+
+// swagger document
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+// const swaggerDocument = require('./swagger.json');
+
+const swaggerDocument = {
+  openapi: 3.0.n,
+  swaggerDefinition: {
+      info: {
+          title: "User Management API",
+          description: "User Management API DOCS",
+          contact: {
+              name: "Mark Tai"
+          },
+          servers: ["http://localhost:3000"]
+      }
+  },
+  apis: ["./routes/index*.js"]
+}
+
+var options = {
+  explorer: true,
+};
 
 // initial of nodemailer
 async function buildMailServer() {
@@ -18,6 +42,11 @@ async function buildMailServer() {
   });
 }
 buildMailServer();
+
+const swaggerDocs = swaggerJsDoc(swaggerDocument);
+router.use('/api-docs', swaggerUi.serve);
+router.get('/api-docs', swaggerUi.setup(swaggerDocs, options));
+
 
 router.get('/', function (req, res, next) {
 
@@ -36,7 +65,6 @@ router.get('/afterlogin', async (req, res) => {
       
       // if user exist
       // update the count of login and last sessions
-      console.log(thedata.result);
       if (thedata.result.length >= 1) {
           let isEmailVerified = getRegisterSource(req.oidc.user['sub'], thedata.result[0]['email_verified']);
           // if user is verified, add login count
@@ -65,7 +93,16 @@ router.get('/dashboard', async (req, res) => {
   });
 });
 
-
+// Routes
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     description: Query all users.
+ *     responses:
+ *       200:
+ *         description: query successful.
+ */
 router.get('/users', async (req, res) => {
 
     let pgs = req.query.pgs;
@@ -74,12 +111,37 @@ router.get('/users', async (req, res) => {
     res.send(users);
 });
 
+
+// Routes
+/**
+ * @swagger
+ * /statistics:
+ *   get:
+ *     description: Query user statistics data 
+ *     responses:
+ *       200:
+ *         description: query successful.
+ */
 router.get('/statistics', async (req, res) => {
   let statistics = await userStatistic();
   console.log(statistics);
   res.send(statistics);
 });
 
+router.post('/updateUserName', async (req, res) => {
+  if (req.oidc.user) {
+      let thedata = await queryUser(req.oidc.user['email']);
+      if (thedata.result.length >= 1) {
+          await updateUserName(thedata.result[0]['id'], req.body.name);
+          res.send('update success');
+      }
+      res.send('update success');
+      // return result;
+  }
+  res.send('update success');
+   console.log(req.body.name);
+
+});
 
 
 function getRegisterSource (sub, email_verified) {
@@ -124,7 +186,6 @@ router.get('/resend/activation', requiresAuth(), async function (req, res, next)
         res.send('Activation sent!');
     }
 });
-
 
 router.get('/activation', requiresAuth(), async function (req, res, next) {
   let gmail = req.query.gmail;

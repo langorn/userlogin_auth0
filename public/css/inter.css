@@ -14,3 +14,24 @@
     border:1px solid black;
     border-radius:2px;
 }
+
+
+.userTable td {
+    padding:5px;
+}
+
+.editBtn{
+    /* margin-top:20px; */
+    border-radius: 2px;
+    color:white;
+    padding:8px;
+    background-color: rgb(21, 178, 250) !important;
+}
+
+.resentBtn{
+    margin-top:20px;
+    border-radius: 2px;
+    color:white;
+    padding:8px;
+    background-color: rgb(83, 83, 247) !important;
+}

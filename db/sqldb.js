@@ -90,12 +90,18 @@ exports.updateUser = ( data ) => {
 
 }
 
+exports.updateUserName = async ( id, name ) => {
+    let sql = `UPDATE users SET name = "${name}" WHERE id = ${id} `;
+    let result = await query(sql);
+    return { 'message': 'Update Success'}
+}
+
+
 exports.activateUser = async ( email , code) => {
   
   let sql = `SELECT * from users WHERE email = "${email}" AND verified_code= "${code}"`;
   let result = await query(sql);
   if (result.length >= 1) {
-      console.log(result[0]);
       let updateSQL = `UPDATE users SET email_verified = 1 WHERE id = ${result[0]['id']} `;
       query(updateSQL, function (err, result) {
         if (err) throw err;
