@@ -81,7 +81,7 @@ router.get('/afterlogin', async (req, res) => {
       } else {
           console.log(`the length is : ${thedata.result.length}`);
       }
-      res.redirect('/profile');
+      res.redirect('/dashboard');
   } 
 
 });
@@ -150,7 +150,7 @@ function getRegisterSource (sub, email_verified) {
   if (textArr && textArr.length > 0) {
       console.log(textArr);
       console.log(email_verified);
-      if (textArr[0] != 'facebook' && textArr[0] != 'google' && email_verified == 1) {
+      if (textArr[0] != 'facebook' && textArr[0] != 'google-oauth2' && email_verified == 1) {
           result = true;
       }
   } 

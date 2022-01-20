@@ -32,7 +32,7 @@ const config = {
     login: false,
     // Pass a custom path to redirect users to a different
     // path after logout.
-    postLogoutRedirect: '/dashboard',
+    postLogoutRedirect: '/',
   },
 };
 
