@@ -1,0 +1,19 @@
+<%- include('partials/header') -%>
+
+  <h1 class="text-4xl mb-4">Welcome <%= user.nickname %></h1>
+
+  
+  <% if (isAccVerified) { %>
+    <p class="py-3">
+        You Email is been verified, click the link below back to Homepage.<br>
+        <a href="/">LINK</a> 
+    </p>
+  <% } else { %>
+    <p class="py-3">
+        You haven't activate your email, Please check your email again .<br>
+        <button class="resentBtn"><a href="/resend/activation">Resend Email Verification</a></button>
+    </p>
+  <% } %>
+
+
+<%- include('partials/footer') -%>

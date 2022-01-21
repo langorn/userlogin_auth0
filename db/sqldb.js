@@ -67,7 +67,6 @@ exports.userStatistic = async (offset, limit) => {
 
 }
 
-
 exports.createUser = (data, verifiedCode) => {
 
   let sql = `INSERT INTO users(name, picture, email, sub, verified_code) VALUES ("${data['name']}", "xxxx", "${data['email']}", "${data['sub']}", "${verifiedCode}")`;
@@ -75,7 +74,6 @@ exports.createUser = (data, verifiedCode) => {
     if (err) throw err;
     console.log("User created");
   });
-
 }
 
 exports.updateUser = ( data ) => {
@@ -87,10 +85,10 @@ exports.updateUser = ( data ) => {
     if (err) throw err;
     console.log("User updated!");
   });
-
 }
 
 exports.updateUserName = async ( id, name ) => {
+
     let sql = `UPDATE users SET name = "${name}" WHERE id = ${id} `;
     let result = await query(sql);
     return { 'message': 'Update Success'}
@@ -106,6 +104,7 @@ exports.activateUser = async ( email , code) => {
       query(updateSQL, function (err, result) {
         if (err) throw err;
         console.log("User updated!");
+        return result;
       });
   } else {
       return { 'message': 'This Activation Code is Invalid !' }

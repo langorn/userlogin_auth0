@@ -6,7 +6,6 @@
     <button class="editBtn" v-on:click="editUsername()">Change Username</button>
     <code class="bg-gray-200"></code><br>
 
-    
     <div>
         <div class = "staticsticBar">
           <table>
@@ -83,14 +82,10 @@
                     body: JSON.stringify(data) // body data type must match "Content-Type" header
                 });
                 vm.getUsers();
-
-
             }
-
         }
       }
     })
-
     vm.getUsers();
     vm.getStatistics();
   </script>
